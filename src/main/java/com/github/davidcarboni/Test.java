@@ -39,7 +39,7 @@ public class Test {
         data = new Data();
         data.password = password;
         data.salt = salt;
-        result = hashApi.hash(null, null, data);
+        result = hashApi.hash(null, data);
         String rehash = result.hash;
         System.out.println("rehash = " + rehash);
         String rehashBytes = ByteArray.toHexString(ByteArray.fromBase64String(hash));

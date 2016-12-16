@@ -19,17 +19,24 @@ import java.io.IOException;
 public class Hash {
 
     @POST
-    public Data hash(HttpServletRequest req, HttpServletResponse res, Data data) throws IOException, PwdEncryptorException {
+    public Data hash(HttpServletResponse res, Data data) throws IOException, PwdEncryptorException {
 
         // Validate
-        if (data == null || StringUtils.isBlank(data.password) || StringUtils.isBlank(data.salt)) {
+        if (data == null || StringUtils.isBlank(data.password)) {
             res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             Data result = new Data();
             result.message = "Please provide a Json message with 'password' and 'salt' key/values.";
             return result;
         }
 
-        // Hash
+        // Hash password with a random salt
+        if (StringUtils.isBlank(data.salt)) {
+            Data result = new Data();
+            result.hash = PwdEncryptor.encrypt(data.password);
+            return result;
+        }
+
+        // Hash password with a knows salt
         Data result = new Data();
         byte[] salt = ByteArray.fromBase64String(data.salt);
         result.hash = PwdEncryptor.encodePassword(PwdEncryptor.TYPE_SSHA, data.password, salt);
