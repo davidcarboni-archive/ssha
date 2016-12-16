@@ -45,7 +45,7 @@ public class Hash {
 
     @GET
     public String info() {
-        return "Please POST a password and salt to /hash (see also /salt).";
+        return "Please POST a password (and optionally a known salt) to /hash (see also /salt).";
     }
 
 
